@@ -1,0 +1,10 @@
+kkadak.fujitsutask
+kkadak.fujitsutask.controller
+kkadak.fujitsutask.cron
+kkadak.fujitsutask.enums
+kkadak.fujitsutask.exceptions
+kkadak.fujitsutask.initializers
+kkadak.fujitsutask.model
+kkadak.fujitsutask.repository
+kkadak.fujitsutask.service
+kkadak.fujitsutask.translators
