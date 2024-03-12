@@ -15,17 +15,14 @@ public class BaseFeeRule extends FeeRule {
      */
     private City city;
 
-    public City getCity() {
-        return city;
-    }
+    public City getCity() { return city; }
 
     public void setCity(City city) { this.city = city; }
 
     /**
      * Required for JPA
      */
-    protected BaseFeeRule() {
-    }
+    protected BaseFeeRule() {}
 
     /**
      * Primary constructor

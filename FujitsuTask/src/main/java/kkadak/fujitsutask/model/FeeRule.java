@@ -31,17 +31,11 @@ public abstract class FeeRule {
      */
     private Double feeAmount;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
-    public VehicleType getVehicleType() {
-        return vehicleType;
-    }
+    public VehicleType getVehicleType() { return vehicleType; }
 
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
@@ -51,8 +45,6 @@ public abstract class FeeRule {
         return feeAmount;
     }
 
-    public void setFeeAmount(Double feeAmount) {
-        this.feeAmount = feeAmount;
-    }
+    public void setFeeAmount(Double feeAmount) { this.feeAmount = feeAmount; }
 
 }

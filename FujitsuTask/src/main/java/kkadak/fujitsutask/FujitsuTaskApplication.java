@@ -16,9 +16,7 @@ public class FujitsuTaskApplication {
         this.weatherDataImporter = weatherDataImporter;
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(FujitsuTaskApplication.class, args);
-    }
+    public static void main(String[] args) { SpringApplication.run(FujitsuTaskApplication.class, args); }
 
     @Bean
     public ApplicationRunner initialWeatherDataFetch() {

@@ -30,17 +30,11 @@ public class ExtraFeeRule extends FeeRule {
      */
     private String valueStr;
 
-    public ExtraFeeRuleMetric getMetric() {
-        return metric;
-    }
+    public ExtraFeeRuleMetric getMetric() { return metric; }
 
-    public void setMetric(ExtraFeeRuleMetric metric) {
-        this.metric = metric;
-    }
+    public void setMetric(ExtraFeeRuleMetric metric) { this.metric = metric; }
 
-    public ExtraFeeRuleValueType getValueType() {
-        return valueType;
-    }
+    public ExtraFeeRuleValueType getValueType() { return valueType; }
 
     public void setValueType(ExtraFeeRuleValueType valueType) {
         this.valueType = valueType;
@@ -50,9 +44,7 @@ public class ExtraFeeRule extends FeeRule {
         return valueStr;
     }
 
-    public void setValueStr(String valueStr) {
-        this.valueStr = valueStr;
-    }
+    public void setValueStr(String valueStr) { this.valueStr = valueStr; }
 
     /**
      * Required for JPA

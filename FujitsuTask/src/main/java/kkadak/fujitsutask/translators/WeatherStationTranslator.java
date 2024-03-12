@@ -6,6 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Used to translate between weather station WMO codes and their respective {@link kkadak.fujitsutask.enums.City} enums
+ * <p>
+ * Also declares which stations will be fetched by {@link kkadak.fujitsutask.cron.WeatherDataImporter}
+ *
+ * @see kkadak.fujitsutask.cron.WeatherDataImporter
+ */
 public class WeatherStationTranslator {
 
     /**

@@ -5,6 +5,11 @@ package kkadak.fujitsutask.exceptions;
  */
 public class IncompatibleFeeRuleException extends Exception {
 
+    /**
+     * Primary constructor
+     *
+     * @param message error message
+     */
     public IncompatibleFeeRuleException(String message) {
 
         super(message);

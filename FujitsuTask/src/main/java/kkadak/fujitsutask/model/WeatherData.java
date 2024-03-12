@@ -48,67 +48,44 @@ public class WeatherData {
      */
     private Long timestamp;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
-    public Integer getStationWmo() {
-        return stationWmo;
-    }
+    public Integer getStationWmo() { return stationWmo; }
 
-    public void setStationWmo(Integer stationWmo) {
-        this.stationWmo = stationWmo;
-    }
+    public void setStationWmo(Integer stationWmo) { this.stationWmo = stationWmo; }
 
     public String getStationName() {
         return stationName;
     }
 
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
-    }
+    public void setStationName(String stationName) { this.stationName = stationName; }
 
-    public Double getAirTemp() {
-        return airTemp;
-    }
+    public Double getAirTemp() { return airTemp; }
 
     public void setAirTemp(Double airTemp) {
         this.airTemp = airTemp;
     }
 
-    public Double getWindSpeed() {
-        return windSpeed;
-    }
+    public Double getWindSpeed() { return windSpeed; }
 
-    public void setWindSpeed(Double windSpeed) {
-        this.windSpeed = windSpeed;
-    }
+    public void setWindSpeed(Double windSpeed) { this.windSpeed = windSpeed; }
 
-    public String getPhenomenon() {
-        return phenomenon;
-    }
+    public String getPhenomenon() { return phenomenon; }
 
     public void setPhenomenon(String phenomenon) {
         this.phenomenon = phenomenon;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
-    }
+    public Long getTimestamp() { return timestamp; }
 
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-    }
+    public void setTimestamp(Long timestamp) { this.timestamp = timestamp; }
 
     /**
      * Required for JPA
      */
-    protected WeatherData() {
-    }
+    protected WeatherData() {}
 
     /**
      * Primary constructor
