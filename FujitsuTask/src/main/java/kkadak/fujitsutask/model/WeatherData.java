@@ -56,17 +56,13 @@ public class WeatherData {
 
     public void setStationWmo(Integer stationWmo) { this.stationWmo = stationWmo; }
 
-    public String getStationName() {
-        return stationName;
-    }
+    public String getStationName() { return stationName; }
 
     public void setStationName(String stationName) { this.stationName = stationName; }
 
     public Double getAirTemp() { return airTemp; }
 
-    public void setAirTemp(Double airTemp) {
-        this.airTemp = airTemp;
-    }
+    public void setAirTemp(Double airTemp) { this.airTemp = airTemp; }
 
     public Double getWindSpeed() { return windSpeed; }
 
@@ -74,9 +70,7 @@ public class WeatherData {
 
     public String getPhenomenon() { return phenomenon; }
 
-    public void setPhenomenon(String phenomenon) {
-        this.phenomenon = phenomenon;
-    }
+    public void setPhenomenon(String phenomenon) { this.phenomenon = phenomenon; }
 
     public Long getTimestamp() { return timestamp; }
 

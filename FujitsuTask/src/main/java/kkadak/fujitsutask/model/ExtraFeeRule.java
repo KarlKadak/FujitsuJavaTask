@@ -40,9 +40,7 @@ public class ExtraFeeRule extends FeeRule {
         this.valueType = valueType;
     }
 
-    public String getValueStr() {
-        return valueStr;
-    }
+    public String getValueStr() { return valueStr; }
 
     public void setValueStr(String valueStr) { this.valueStr = valueStr; }
 

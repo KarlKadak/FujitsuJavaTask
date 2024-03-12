@@ -5,6 +5,11 @@ package kkadak.fujitsutask.exceptions;
  */
 public class DeliveryFeeCalculationException extends Exception {
 
+    /**
+     * Primary constructor
+     *
+     * @param message error message
+     */
     public DeliveryFeeCalculationException(String message) {
 
         super(message);

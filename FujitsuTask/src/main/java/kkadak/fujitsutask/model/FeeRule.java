@@ -41,9 +41,7 @@ public abstract class FeeRule {
         this.vehicleType = vehicleType;
     }
 
-    public Double getFeeAmount() {
-        return feeAmount;
-    }
+    public Double getFeeAmount() { return feeAmount; }
 
     public void setFeeAmount(Double feeAmount) { this.feeAmount = feeAmount; }
 
