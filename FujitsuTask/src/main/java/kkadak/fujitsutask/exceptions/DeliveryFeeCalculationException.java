@@ -11,8 +11,6 @@ public class DeliveryFeeCalculationException extends Exception {
      * @param message error message
      */
     public DeliveryFeeCalculationException(String message) {
-
         super(message);
     }
-
 }

@@ -38,5 +38,4 @@ public interface DeliveryService {
      * @throws DeliveryFeeCalculationException in case of error
      */
     double getDeliveryFee(City city, VehicleType vehicleType, long timestamp) throws DeliveryFeeCalculationException;
-
 }

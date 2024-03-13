@@ -31,18 +31,40 @@ public abstract class FeeRule {
      */
     private Double feeAmount;
 
-    public Long getId() { return id; }
+    /**
+     * Amount of seconds past UTC epoch when the rule was set
+     */
+    private Long validFromTimestamp;
 
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public VehicleType getVehicleType() { return vehicleType; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
 
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
 
-    public Double getFeeAmount() { return feeAmount; }
+    public Double getFeeAmount() {
+        return feeAmount;
+    }
 
-    public void setFeeAmount(Double feeAmount) { this.feeAmount = feeAmount; }
+    public void setFeeAmount(Double feeAmount) {
+        this.feeAmount = feeAmount;
+    }
 
+    public Long getValidFromTimestamp() {
+        return validFromTimestamp;
+    }
+
+    public void setValidFromTimestamp(Long timestamp) {
+        this.validFromTimestamp = timestamp;
+    }
 }

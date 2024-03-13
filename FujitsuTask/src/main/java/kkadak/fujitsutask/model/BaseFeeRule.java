@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import kkadak.fujitsutask.enums.City;
 import kkadak.fujitsutask.enums.VehicleType;
 
+import java.time.Instant;
+
 /**
  * A single base fee rule for the fee calculation
  */
@@ -15,14 +17,19 @@ public class BaseFeeRule extends FeeRule {
      */
     private City city;
 
-    public City getCity() { return city; }
+    public City getCity() {
+        return city;
+    }
 
-    public void setCity(City city) { this.city = city; }
+    public void setCity(City city) {
+        this.city = city;
+    }
 
     /**
      * Required for JPA
      */
-    protected BaseFeeRule() {}
+    protected BaseFeeRule() {
+    }
 
     /**
      * Primary constructor
@@ -32,10 +39,9 @@ public class BaseFeeRule extends FeeRule {
      * @param feeAmount   fee amount, null if the use of specified vehicle in specified city is prohibited
      */
     public BaseFeeRule(City city, VehicleType vehicleType, Double feeAmount) {
-
         this.city = city;
         this.setVehicleType(vehicleType);
         this.setFeeAmount(feeAmount);
+        this.setValidFromTimestamp(Instant.now().getEpochSecond());
     }
-
 }

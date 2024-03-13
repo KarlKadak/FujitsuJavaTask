@@ -24,5 +24,4 @@ public enum ExtraFeeRuleValueType {
      * Used in case of a String translation error
      */
     UNKNOWN
-
 }

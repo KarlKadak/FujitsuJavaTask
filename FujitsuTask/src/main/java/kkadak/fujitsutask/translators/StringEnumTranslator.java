@@ -24,12 +24,10 @@ public class StringEnumTranslator {
      * {@link kkadak.fujitsutask.enums.City}.UNKNOWN in case of error
      */
     public static City getCityFromStr(String cityStr) {
-
         // Input validation
         if (cityStr == null) return City.UNKNOWN;
 
         return switch (cityStr.toLowerCase()) {
-
             case "tallinn", "tln" -> City.TALLINN;
             case "tartu", "trt" -> City.TARTU;
             case "pärnu", "parnu", "prn" -> City.PARNU;
@@ -45,9 +43,7 @@ public class StringEnumTranslator {
      * @throws IllegalArgumentException in case of undefined translation
      */
     public static String getStrFromCity(City city) {
-
         return switch (city) {
-
             case TALLINN -> "Tallinn";
             case TARTU -> "Tartu";
             case PARNU -> "Pärnu";
@@ -64,18 +60,15 @@ public class StringEnumTranslator {
      * {@link kkadak.fujitsutask.enums.VehicleType}.UNKNOWN in case of error
      */
     public static VehicleType getVehicleTypeFromStr(String vehicleTypeStr) {
-
         // Input validation
         if (vehicleTypeStr == null) return VehicleType.UNKNOWN;
 
         return switch (vehicleTypeStr.toLowerCase()) {
-
             case "car" -> VehicleType.CAR;
             case "scooter" -> VehicleType.SCOOTER;
             case "bike" -> VehicleType.BIKE;
             default -> VehicleType.UNKNOWN;
         };
-
     }
 
     /**
@@ -86,15 +79,12 @@ public class StringEnumTranslator {
      * @throws IllegalArgumentException in case of undefined translation
      */
     public static String getStrFromVehicleType(VehicleType vehicleType) {
-
         return switch (vehicleType) {
-
             case CAR -> "car";
             case SCOOTER -> "scooter";
             case BIKE -> "bike";
             default -> throw new IllegalArgumentException();
         };
-
     }
 
     /**
@@ -106,18 +96,15 @@ public class StringEnumTranslator {
      * {@link kkadak.fujitsutask.enums.ExtraFeeRuleValueType}.UNKNOWN in case of error
      */
     public static ExtraFeeRuleValueType getValueTypeFromStr(String valueTypeStr) {
-
         // Input validation
         if (valueTypeStr == null) return ExtraFeeRuleValueType.UNKNOWN;
 
         return switch (valueTypeStr.toLowerCase()) {
-
             case "from" -> ExtraFeeRuleValueType.FROM;
             case "until" -> ExtraFeeRuleValueType.UNTIL;
             case "phenomenon" -> ExtraFeeRuleValueType.PHENOMENON;
             default -> ExtraFeeRuleValueType.UNKNOWN;
         };
-
     }
 
     /**
@@ -129,18 +116,14 @@ public class StringEnumTranslator {
      * {@link kkadak.fujitsutask.enums.ExtraFeeRuleMetric}.UNKNOWN in case of error
      */
     public static ExtraFeeRuleMetric getMetricFromStr(String metricStr) {
-
         // Input validation
         if (metricStr == null) return ExtraFeeRuleMetric.UNKNOWN;
 
         return switch (metricStr.toLowerCase()) {
-
             case "airtemp" -> ExtraFeeRuleMetric.AIRTEMP;
             case "windspeed" -> ExtraFeeRuleMetric.WINDSPEED;
             case "phenomenon" -> ExtraFeeRuleMetric.PHENOMENON;
             default -> ExtraFeeRuleMetric.UNKNOWN;
         };
-
     }
-
 }

@@ -12,6 +12,7 @@ import kkadak.fujitsutask.repository.ExtraFeeRuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,14 +22,12 @@ import java.util.Objects;
  */
 @Component
 public class FeeRuleInitializer {
-
     private final BaseFeeRuleRepository baseFeeRuleRepository;
     private final ExtraFeeRuleRepository extraFeeRuleRepository;
 
     @Autowired
     public FeeRuleInitializer(BaseFeeRuleRepository baseFeeRuleRepository,
                               ExtraFeeRuleRepository extraFeeRuleRepository) {
-
         this.baseFeeRuleRepository = baseFeeRuleRepository;
         this.extraFeeRuleRepository = extraFeeRuleRepository;
     }
@@ -44,24 +43,19 @@ public class FeeRuleInitializer {
      * @param feeAmount   the amount of the fee, null if the use of specified vehicle in specified city is prohibited
      * @throws IncompatibleFeeRuleException in case of existence of conflicting rule or invalid parameters
      */
-    public void InitializeNewRule(City city, VehicleType vehicleType, Double feeAmount)
-            throws IncompatibleFeeRuleException {
-
+    public void InitializeNewRule(City city,
+                                  VehicleType vehicleType,
+                                  Double feeAmount) throws IncompatibleFeeRuleException {
         // Check parameter validity
         if (city == null
                 || city == City.UNKNOWN
                 || vehicleType == null
                 || vehicleType == VehicleType.UNKNOWN
                 || (feeAmount != null && feeAmount <= 0)) {
-
             throw new IncompatibleFeeRuleException("Invalid rule parameter(s)");
         }
 
-        // Check existence of rule
-        if (baseFeeRuleRepository.getBaseFeeRuleByCityAndVehicleType(city, vehicleType) != null)
-            throw new IncompatibleFeeRuleException("Rule for specified vehicle type in specified city already exists");
-
-        // Save new rule
+        // Save new rule, application logic prefers most recent rule, so old rule gets automatically overridden
         baseFeeRuleRepository.save(new BaseFeeRule(city, vehicleType, feeAmount));
     }
 
@@ -81,9 +75,7 @@ public class FeeRuleInitializer {
     public void InitializeNewRule(ExtraFeeRuleMetric ruleMetric,
                                   ExtraFeeRuleValueType valueType,
                                   double value, VehicleType vehicleType,
-                                  Double feeAmount)
-            throws IncompatibleFeeRuleException {
-
+                                  Double feeAmount) throws IncompatibleFeeRuleException {
         // Check parameter validity
         if (vehicleType == null
                 || vehicleType == VehicleType.UNKNOWN
@@ -93,10 +85,8 @@ public class FeeRuleInitializer {
             throw new IncompatibleFeeRuleException("Invalid rule parameter(s)");
 
         // Check conflicting rules
-        for (ExtraFeeRule existingRule : extraFeeRuleRepository
-                .getExtraFeeRulesByVehicleType(vehicleType).stream()
+        for (ExtraFeeRule existingRule : extraFeeRuleRepository.getRules(vehicleType).stream()
                 .filter(rule -> rule.getMetric() == ruleMetric).toList()) {
-
             ExtraFeeRuleValueType existingType = existingRule.getValueType();
             if ((existingType == valueType && value == Double.parseDouble(existingRule.getValueStr()))
                     || (existingType == ExtraFeeRuleValueType.UNTIL
@@ -105,8 +95,8 @@ public class FeeRuleInitializer {
                     || (existingType == ExtraFeeRuleValueType.FROM
                         && valueType == ExtraFeeRuleValueType.UNTIL
                         && Double.parseDouble(existingRule.getValueStr()) <= value))
-                throw new IncompatibleFeeRuleException(String
-                        .format("Conflicting rule (ID: %d)", existingRule.getId()));
+                throw new IncompatibleFeeRuleException(String.format("Conflicting rule (ID: %d)",
+                        existingRule.getId()));
         }
 
         // Save new rule
@@ -124,9 +114,7 @@ public class FeeRuleInitializer {
      * @param amount      the amount of the fee, null if the use of specified vehicle is prohibited in the conditions
      * @throws IncompatibleFeeRuleException in case of existence of conflicting rule or invalid parameters
      */
-    public void InitializeNewRule(String phenomenon, VehicleType vehicleType, Double amount)
-            throws IncompatibleFeeRuleException {
-
+    public void InitializeNewRule(String phenomenon, VehicleType vehicleType, Double amount) throws IncompatibleFeeRuleException {
         // Check parameter validity
         if (vehicleType == null
                 || vehicleType == VehicleType.UNKNOWN
@@ -136,8 +124,7 @@ public class FeeRuleInitializer {
             throw new IncompatibleFeeRuleException("Invalid rule parameter(s)");
 
         // Check conflicting rules
-        for (ExtraFeeRule rule : extraFeeRuleRepository.getExtraFeeRulesByVehicleType(vehicleType)) {
-
+        for (ExtraFeeRule rule : extraFeeRuleRepository.getRules(vehicleType)) {
             if (rule.getValueType() == ExtraFeeRuleValueType.PHENOMENON
                     && Objects.equals(rule.getValueStr(), phenomenon))
                 throw new IncompatibleFeeRuleException(String.format("Conflicting rule (ID: %d)", rule.getId()));
@@ -151,7 +138,6 @@ public class FeeRuleInitializer {
      * Initializes the fee rules to their default values in the fee rule tables
      */
     public void InitializeDefaultRules() {
-
         final List<BaseFeeRule> baseFeeRules = new ArrayList<>() {
             {
                 // Base fees for Tallinn
@@ -170,80 +156,63 @@ public class FeeRuleInitializer {
                 add(new BaseFeeRule(City.PARNU, VehicleType.BIKE, 2.0));
             }
         };
-
         final List<ExtraFeeRule> extraFeeRules = new ArrayList<>() {
             {
                 // Extra fees for air temperature
-                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL,
-                        -10.0, VehicleType.SCOOTER, 1.0));
-                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL,
-                        -10.0, VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL,
-                        0.0, VehicleType.SCOOTER, 0.5));
-                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL,
-                        0.0, VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL, -10.0,
+                        VehicleType.SCOOTER, 1.0));
+                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL, -10.0,
+                        VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL, 0.0,
+                        VehicleType.SCOOTER, 0.5));
+                add(new ExtraFeeRule(ExtraFeeRuleMetric.AIRTEMP, ExtraFeeRuleValueType.UNTIL, 0.0,
+                        VehicleType.BIKE, 0.5));
 
                 // Extra fees for wind speed
-                add(new ExtraFeeRule(ExtraFeeRuleMetric.WINDSPEED, ExtraFeeRuleValueType.FROM,
-                        10.0, VehicleType.BIKE, 0.5));
-                add(new ExtraFeeRule(ExtraFeeRuleMetric.WINDSPEED, ExtraFeeRuleValueType.FROM,
-                        20.0, VehicleType.BIKE, null));
+                add(new ExtraFeeRule(ExtraFeeRuleMetric.WINDSPEED, ExtraFeeRuleValueType.FROM, 10.0,
+                        VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule(ExtraFeeRuleMetric.WINDSPEED, ExtraFeeRuleValueType.FROM, 20.0,
+                        VehicleType.BIKE, null));
 
                 // Extra fees for weather phenomenons
-
                 // Snow
-                add(new ExtraFeeRule("Light snow shower",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Moderate snow shower",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Heavy snow shower",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Light sleet",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Moderate sleet",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Light snowfall",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Moderate snowfall",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Heavy snowfall",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Blowing snow",
-                        VehicleType.BIKE, 1.0));
-                add(new ExtraFeeRule("Drifting snow",
-                        VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Light snow shower", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Moderate snow shower", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Heavy snow shower", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Light sleet", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Moderate sleet", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Light snowfall", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Moderate snowfall", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Heavy snowfall", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Blowing snow", VehicleType.BIKE, 1.0));
+                add(new ExtraFeeRule("Drifting snow", VehicleType.BIKE, 1.0));
 
                 // Rain
-                add(new ExtraFeeRule("Light shower",
-                        VehicleType.BIKE, 0.5));
-                add(new ExtraFeeRule("Moderate shower",
-                        VehicleType.BIKE, 0.5));
-                add(new ExtraFeeRule("Heavy shower",
-                        VehicleType.BIKE, 0.5));
-                add(new ExtraFeeRule("Light rain",
-                        VehicleType.BIKE, 0.5));
-                add(new ExtraFeeRule("Moderate rain",
-                        VehicleType.BIKE, 0.5));
-                add(new ExtraFeeRule("Heavy rain",
-                        VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule("Light shower", VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule("Moderate shower", VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule("Heavy shower", VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule("Light rain", VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule("Moderate rain", VehicleType.BIKE, 0.5));
+                add(new ExtraFeeRule("Heavy rain", VehicleType.BIKE, 0.5));
 
                 // Glaze, hail, thunder
-                add(new ExtraFeeRule("Glaze",
-                        VehicleType.BIKE, null));
-                add(new ExtraFeeRule("Hail",
-                        VehicleType.BIKE, null));
-                add(new ExtraFeeRule("Thunder",
-                        VehicleType.BIKE, null));
-                add(new ExtraFeeRule("Thunderstorm",
-                        VehicleType.BIKE, null));
+                add(new ExtraFeeRule("Glaze", VehicleType.BIKE, null));
+                add(new ExtraFeeRule("Hail", VehicleType.BIKE, null));
+                add(new ExtraFeeRule("Thunder", VehicleType.BIKE, null));
+                add(new ExtraFeeRule("Thunderstorm", VehicleType.BIKE, null));
             }
         };
 
-        baseFeeRuleRepository.deleteAll();
-        extraFeeRuleRepository.deleteAll();
+        List<ExtraFeeRule> currentExtraFeeRules = extraFeeRuleRepository.findAll();
+        long timestamp = Instant.now().getEpochSecond();
+
+        for (ExtraFeeRule rule : currentExtraFeeRules) {
+            if (rule.getValidUntilTimestamp() == null) rule.setValidUntilTimestamp(timestamp);
+        }
+
+        extraFeeRuleRepository.saveAll(currentExtraFeeRules);
 
         baseFeeRuleRepository.saveAll(baseFeeRules);
         extraFeeRuleRepository.saveAll(extraFeeRules);
     }
-
 }

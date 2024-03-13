@@ -24,5 +24,4 @@ public enum ExtraFeeRuleMetric {
      * Used in case of a String translation error
      */
     UNKNOWN
-
 }

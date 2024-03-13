@@ -5,6 +5,8 @@ import kkadak.fujitsutask.enums.ExtraFeeRuleMetric;
 import kkadak.fujitsutask.enums.ExtraFeeRuleValueType;
 import kkadak.fujitsutask.enums.VehicleType;
 
+import java.time.Instant;
+
 /**
  * A single extra fee rule for the fee calculation
  */
@@ -30,24 +32,48 @@ public class ExtraFeeRule extends FeeRule {
      */
     private String valueStr;
 
-    public ExtraFeeRuleMetric getMetric() { return metric; }
+    /**
+     * Amount of seconds past UTC epoch when the rule was disabled
+     */
+    private Long validUntilTimestamp;
 
-    public void setMetric(ExtraFeeRuleMetric metric) { this.metric = metric; }
+    public ExtraFeeRuleMetric getMetric() {
+        return metric;
+    }
 
-    public ExtraFeeRuleValueType getValueType() { return valueType; }
+    public void setMetric(ExtraFeeRuleMetric metric) {
+        this.metric = metric;
+    }
+
+    public ExtraFeeRuleValueType getValueType() {
+        return valueType;
+    }
 
     public void setValueType(ExtraFeeRuleValueType valueType) {
         this.valueType = valueType;
     }
 
-    public String getValueStr() { return valueStr; }
+    public String getValueStr() {
+        return valueStr;
+    }
 
-    public void setValueStr(String valueStr) { this.valueStr = valueStr; }
+    public void setValueStr(String valueStr) {
+        this.valueStr = valueStr;
+    }
+
+    public Long getValidUntilTimestamp() {
+        return validUntilTimestamp;
+    }
+
+    public void setValidUntilTimestamp(Long validUntilTimestamp) {
+        this.validUntilTimestamp = validUntilTimestamp;
+    }
 
     /**
      * Required for JPA
      */
-    protected ExtraFeeRule() {}
+    protected ExtraFeeRule() {
+    }
 
     /**
      * Constructor for creating an extra fee rule with a numeric value
@@ -60,12 +86,12 @@ public class ExtraFeeRule extends FeeRule {
      */
     public ExtraFeeRule(ExtraFeeRuleMetric metric, ExtraFeeRuleValueType valueType,
                         double value, VehicleType vehicleType, Double feeAmount) {
-
         this.metric = metric;
         this.valueType = valueType;
         this.valueStr = String.format("%f", value);
         this.setVehicleType(vehicleType);
         this.setFeeAmount(feeAmount);
+        this.setValidFromTimestamp(Instant.now().getEpochSecond());
     }
 
     /**
@@ -76,12 +102,11 @@ public class ExtraFeeRule extends FeeRule {
      * @param feeAmount   fee amount, null if the use of specified vehicle is prohibited in the conditions
      */
     public ExtraFeeRule(String phenomenon, VehicleType vehicleType, Double feeAmount) {
-
         this.metric = ExtraFeeRuleMetric.PHENOMENON;
         this.valueType = ExtraFeeRuleValueType.PHENOMENON;
         this.valueStr = phenomenon;
         this.setVehicleType(vehicleType);
         this.setFeeAmount(feeAmount);
+        this.setValidFromTimestamp(Instant.now().getEpochSecond());
     }
-
 }

@@ -23,11 +23,9 @@ import java.util.List;
  */
 @Component
 public class WeatherDataImporter {
-
     private final WeatherDataRepository repository;
 
     public WeatherDataImporter(WeatherDataRepository repository) {
-
         this.repository = repository;
     }
 
@@ -43,17 +41,13 @@ public class WeatherDataImporter {
      */
     @Scheduled(cron = "0 15 * * * *")
     public void fetchAndSave() {
-
         final List<Integer> stationWmosToFetch = WeatherStationTranslator.getStationWmosToFetch();
-
         List<WeatherData> fetchedData = new ArrayList<>();
-
         Document doc;
 
         // Fetches the XML from the URL and builds a Document object from it
         // In case of Exception, prints it to the console and returns
         try {
-
             URL url = new URL("https://www.ilmateenistus.ee/ilma_andmed/xml/observations.php");
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();
@@ -62,22 +56,16 @@ public class WeatherDataImporter {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             doc = dBuilder.parse(inputStream);
             doc.getDocumentElement().normalize();
-
         } catch (Exception e) {
-
             System.out.printf("Exception thrown while fetching data: %s%n", e.getMessage());
             return;
         }
 
-        long timestamp;
-
         // Attempt to retrieve the 'timestamp' attribute from the XML, in case of failure abort the function and return
+        long timestamp;
         try {
-
             timestamp = Long.parseLong(doc.getDocumentElement().getAttribute("timestamp"));
-
         } catch (Exception e) {
-
             return;
         }
 
@@ -91,38 +79,28 @@ public class WeatherDataImporter {
         // - add the new object to the database
         // In case an Exception is thrown continue to the next Node
         for (int i = 0, length = nList.getLength(); i < length; i++) {
-
             try {
-
                 Node nNode = nList.item(i);
-
                 if (nNode.getNodeType() != Node.ELEMENT_NODE) continue;
-
                 Element eElement = (Element) nNode;
-
                 String parsedWmoStr = eElement.getElementsByTagName("wmocode").item(0).getTextContent();
                 if (parsedWmoStr.isEmpty()) continue;
                 Integer parsedWmo = Integer.parseInt(parsedWmoStr);
-
                 if (!stationWmosToFetch.contains(parsedWmo)) continue;
-
-                fetchedData
-                        .add(new WeatherData(
-                                Integer.parseInt(
-                                        eElement.getElementsByTagName("wmocode").item(0).getTextContent()),
-                                eElement.getElementsByTagName("name").item(0).getTextContent(),
-                                Double.parseDouble(
-                                        eElement.getElementsByTagName("airtemperature").item(0).getTextContent()),
-                                Double.parseDouble(
-                                        eElement.getElementsByTagName("windspeed").item(0).getTextContent()),
-                                eElement.getElementsByTagName("phenomenon").item(0).getTextContent(),
-                                timestamp));
-
-            } catch (Exception ignored) {}
-
+                fetchedData.add(new WeatherData(Integer.parseInt(eElement.getElementsByTagName("wmocode").item(0)
+                            .getTextContent()),
+                        eElement.getElementsByTagName("name").item(0)
+                                .getTextContent(),
+                        Double.parseDouble(eElement.getElementsByTagName("airtemperature").item(0)
+                                .getTextContent()),
+                        Double.parseDouble(eElement.getElementsByTagName("windspeed").item(0)
+                                .getTextContent()),
+                        eElement.getElementsByTagName("phenomenon").item(0)
+                                .getTextContent(),
+                        timestamp));
+            } catch (Exception ignored) {
+            }
         }
-
         repository.saveAll(fetchedData);
     }
-
 }

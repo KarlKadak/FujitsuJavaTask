@@ -11,8 +11,6 @@ public class IncompatibleFeeRuleException extends Exception {
      * @param message error message
      */
     public IncompatibleFeeRuleException(String message) {
-
         super(message);
     }
-
 }
