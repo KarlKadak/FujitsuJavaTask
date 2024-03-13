@@ -3,7 +3,10 @@ package kkadak.fujitsutask.cron;
 import kkadak.fujitsutask.model.WeatherData;
 import kkadak.fujitsutask.repository.WeatherDataRepository;
 import kkadak.fujitsutask.translators.WeatherStationTranslator;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,11 +25,28 @@ import java.util.List;
  * Class used for importing weather data to the WeatherData table
  */
 @Component
+@PropertySource("classpath:application.properties")
 public class WeatherDataImporter {
     private final WeatherDataRepository repository;
+    private final TaskScheduler taskScheduler;
 
-    public WeatherDataImporter(WeatherDataRepository repository) {
+    /**
+     * Cron expression gathered from application.properties based on which {@link #taskScheduler} runs
+     * {@link #fetchAndSave()}
+     */
+    @Value("${cron.expression}")
+    private String cronExpression;
+
+    public WeatherDataImporter(WeatherDataRepository repository, TaskScheduler taskScheduler) {
         this.repository = repository;
+        this.taskScheduler = taskScheduler;
+    }
+
+    /**
+     * Schedules the {@link #fetchAndSave()} method to run using the cron expression specified in application.properties
+     */
+    public void scheduleFetch() {
+        taskScheduler.schedule(this::fetchAndSave, new CronTrigger(cronExpression));
     }
 
     /**
@@ -35,11 +55,10 @@ public class WeatherDataImporter {
      * and saves it to the database for the stations declared in
      * {@link kkadak.fujitsutask.translators.WeatherStationTranslator}
      * <p>
-     * Configured to automatically run using cron.
+     * Configured to automatically run using cron expression in application.properties file
      *
      * @see kkadak.fujitsutask.translators.WeatherStationTranslator
      */
-    @Scheduled(cron = "0 15 * * * *")
     public void fetchAndSave() {
         final List<Integer> stationWmosToFetch = WeatherStationTranslator.getStationWmosToFetch();
         List<WeatherData> fetchedData = new ArrayList<>();
