@@ -19,6 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the {@link kkadak.fujitsutask.service.DeliveryService} interface
+ */
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
     private final WeatherDataRepository weatherDataRepository;
