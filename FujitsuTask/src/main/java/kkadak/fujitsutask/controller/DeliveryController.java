@@ -46,8 +46,8 @@ public class DeliveryController {
      *
      * @param modeStr      optional parameter to specify action mode for rule management,
      *                     in case missing, default fee calculation is assumed, valid options are:
-     *                     "reset", "print", "disable", "add"
-     * @param idStr        specifies the ID of the rule to be removed in case modeStr is set to "remove"
+     *                     "reset", "print", "history", "disable", "add"
+     * @param idStr        specifies the ID of the rule to be removed in case modeStr is set to "disable"
      * @param typeStr      specifies the type of rule to be added in case modeStr is set to "add",
      *                     valid options are: "base", "from", "until", "phenomenon",
      *                     translated to {@link kkadak.fujitsutask.enums.ExtraFeeRuleValueType} in case of extra fee
