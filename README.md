@@ -51,7 +51,7 @@ or [applying the default one](#applying-the-default-ruleset).**
         - "Tallinn"
         - "Tartu"
         - "Pärnu" / "Parnu"
-        - specifies the city the delivery takes place in
+    - specifies the city the delivery takes place in
 - `vehicle`
     - required
     - accepted values (case insensitive):
