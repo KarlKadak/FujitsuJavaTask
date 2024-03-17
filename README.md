@@ -127,8 +127,8 @@ Every fee rule must have a `type`.
 
 - **RBFs** have "base" `type`
 - **ATEFs** and **WSEFs** have either "until" or "from" `type`
-    - "until" `type` specifies that a rule is valid until a `metric` is above a `value` (current value ≤ rule value)
-    - "from" `type` specifies that a rule is valid from the point where a `metric` is the same or more than a `value`
+    - "until" `type` specifies that a rule applies until a `metric` is above a `value` (current value ≤ rule value)
+    - "from" `type` specifies that a rule applies from the point where a `metric` is the same or more than a `value`
       (current value ≥ rule value)
     - **when creating new rules, no overlapping rules with same `metric` but different `type` can exist or an error
       message is displayed with the ID of the conflicting rule**
