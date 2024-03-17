@@ -236,3 +236,6 @@ The H2 database has 3 tables:
 
 Complete documentation of the classes, methods and fields can be explored under the
 [JavaDoc pages](https://karlkadak.github.io/FujitsuJavaTask/).
+
+A test coverage report can be explored under the
+[coverage report pages](https://karlkadak.github.io/FujitsuJavaTaskCoverage/).
