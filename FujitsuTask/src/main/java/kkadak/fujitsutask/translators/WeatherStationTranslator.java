@@ -42,18 +42,4 @@ public class WeatherStationTranslator {
     public static int getWmoOfCity(City city) {
         return citiesToStationWmos.get(city);
     }
-
-    /**
-     * Returns the {@link kkadak.fujitsutask.enums.City}
-     * for which the weather station with the specified WMO code is used
-     * <p>
-     * Implies there are no keys with equal values in {@link #citiesToStationWmos}
-     *
-     * @param wmo WMO code to query
-     * @return {@link kkadak.fujitsutask.enums.City} for which the weather station with the specified WMO code is used
-     */
-    public static City getCityOfWmo(int wmo) {
-        return citiesToStationWmos.entrySet().stream()
-                .filter(entry -> Objects.equals(entry.getValue(), wmo)).toList().get(0).getKey();
-    }
 }

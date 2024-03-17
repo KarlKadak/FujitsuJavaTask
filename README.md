@@ -22,6 +22,7 @@ completed.
     - Spring Data JPA
     - H2 Database
 - [Estonian Environment Agency weather API](https://www.ilmateenistus.ee/teenused/ilmainfo/eesti-vaatlusandmed-xml/)
+- [Mockito mocking framework](https://site.mockito.org/)
 
 ## Configuration
 

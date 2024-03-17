@@ -129,10 +129,4 @@ public class WeatherData {
         this.phenomenon = phenomenon;
         this.timestamp = timestamp;
     }
-
-    @Override
-    public String toString() {
-        return String.format("[id: %d] @%d - station %d (%s) - %.1fC %.1fm/s %s",
-                id, timestamp, stationWmo, stationName, airTemp, windSpeed, phenomenon);
-    }
 }
